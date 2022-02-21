@@ -18,13 +18,13 @@ ByteCTF2021 Final 出了道 Lisa's Cat，在 YUV 色彩空间中使用 Arnold's 
 
 为了验证参数是否正确，我们可以把疑似水印给染上色，然后对此图进行 Cat 变换，观察变换后的图像，实际上只需要少量的水印像素就可以确定图像了。
 
-![变换前](C:/Users/NanoApe/AppData/Roaming/Typora/typora-user-images/image-20220222013652451.png)
+![变换前](https://oss.nan.pub/imgs/image-20220222013652451.png)
 
-![变换后](C:/Users/NanoApe/AppData/Roaming/Typora/typora-user-images/image-20220222013719811.png)
+![变换后](https://oss.nan.pub/imgs/image-20220222013719811.png)
 
 当然，爆破参数也是可行的，但需要先爆破横向变换的参数。Arnold's cat map 变换算法本质上就是一次纵向变换加上一次横向变换，所以两个参数可以分别爆破。写个程序枚举参数并输出横向变换后的图，挑一些明显的看。如下图是参数差 1 的结果，是不是有一条明显的斜线？参数 +1 后这条斜率为 1 的斜线也就变成了直线并且变成了边框，说明我们成功爆破除了 Arnold's cat map 的横向变换参数。
 
-![爆破结果](C:/Users/NanoApe/AppData/Roaming/Typora/typora-user-images/image-20220222014148267.png)
+![爆破结果](https://oss.nan.pub/imgs/image-20220222014148267.png)
 
 对三个通道的 LSB 各做一次 Cat 变换猜测，得到三段 flag，按照猫猫的分布从上到下连接得到 flag 的前半部分。
 
