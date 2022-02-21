@@ -34,6 +34,4 @@ ByteCTF2021 Final 出了道 Lisa's Cat，在 YUV 色彩空间中使用 Arnold's 
 
 `soup.png` 这里实际上是使用了 EZStego 调色板隐写算法。所以直接照着实现一下就好了，就可以获得flag 的后半段。具体算法实现看 exp 吧。
 
-exp: https://github.com/Konano/CTF-challenges/blob/master/Cat%26Soup/soup_exp.py
-
 不过这题不需要知道 EZStego 也可以解，就留给各位思考了！

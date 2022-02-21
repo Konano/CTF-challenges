@@ -43,5 +43,3 @@ xor 的结果只和 f1 有关，所以此时也可以通过爆破获得 xor 的 
 ### 后记
 
 这题的 DangerousBehavior 判断放得太后了，导致所有在比赛场上做出这道题的人都利用了 valid_pos 的报错而绕过了 DangerousBehavior，从而出现了更加简单的非预期解法。虽然即便是这样解出这道题的队伍也只有 4 个，但还是略显遗憾，没能让大家真的去预测 shuffle 后的结果……放在 GitHub 上的[题目代码](https://github.com/Konano/CTF-challenges/blob/master/OTP/main.py)已经修复了该处 Bug，有兴趣的可以自己试试看。
-
-exp: https://github.com/Konano/CTF-challenges/blob/master/OTP/exp.py（写了 600+ 行，没优化过所以很拉，建议自己动手试试）
