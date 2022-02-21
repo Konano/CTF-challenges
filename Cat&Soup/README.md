@@ -1,0 +1,39 @@
+# Cat&Soup
+
+## Description
+
+## Flag
+
+`TQLCTF{I_H@V3_a_LOt_oF_c4t5_tHeR3_4R3_$oooOo0_CU7e!}`
+
+## Writeup
+
+ByteCTF2021 Final 出了道 Lisa's Cat，在 YUV 色彩空间中使用 Arnold's cat map 变换算法，参数则隐藏在某个 LSB 内。当时的我，没看到参数，也没使用 YUV 色彩空间，但最后还是做出来了……于是便有了这题。
+
+选手们可以获得一个加密压缩包，但这个压缩包的密码就是 flag 本身，所以是不可能解开来的。这里本来想用常规伪加密的方法，但想了想，要不就直接把原文塞进 zip 中加密后的数据块里面吧（好像还没见到有人这么做过）。提取出原图后可以看到一张为 `cat.png`， 一张为 `soup.png`，这是两个独立的子任务。
+
+### Cat
+
+先说说 `cat.png`，从文件名可以知道大概率使用了 Cat 变换算法，同时我们在 RGB 三个通道的 LSB 都发现了奇怪的水印。通过观察水印的分布规律，可以推测出 Cat 变换中的两个变换参数（补充：这种情况只在 Cat 变换重复次数为 1 时才可能通过观察水印猜测得到水印的分布规律）
+
+为了验证参数是否正确，我们可以把疑似水印给染上色，然后对此图进行 Cat 变换，观察变换后的图像，实际上只需要少量的水印像素就可以确定图像了。
+
+![变换前](C:/Users/NanoApe/AppData/Roaming/Typora/typora-user-images/image-20220222013652451.png)
+
+![变换后](C:/Users/NanoApe/AppData/Roaming/Typora/typora-user-images/image-20220222013719811.png)
+
+当然，爆破参数也是可行的，但需要先爆破横向变换的参数。Arnold's cat map 变换算法本质上就是一次纵向变换加上一次横向变换，所以两个参数可以分别爆破。写个程序枚举参数并输出横向变换后的图，挑一些明显的看。如下图是参数差 1 的结果，是不是有一条明显的斜线？参数 +1 后这条斜率为 1 的斜线也就变成了直线并且变成了边框，说明我们成功爆破除了 Arnold's cat map 的横向变换参数。
+
+![爆破结果](C:/Users/NanoApe/AppData/Roaming/Typora/typora-user-images/image-20220222014148267.png)
+
+对三个通道的 LSB 各做一次 Cat 变换猜测，得到三段 flag，按照猫猫的分布从上到下连接得到 flag 的前半部分。
+
+那么有人会问了，你不是说这种情况只对重复一次的 Cat 变换有效，ByteCTF Final 那题不是重复了 66 次吗？的确，所以后来我仔细研究了出题人给的 exp.py，发现它实现有问题，实际上只重复了一次……
+
+### Soup
+
+`soup.png` 这里实际上是使用了 EZStego 调色板隐写算法。所以直接照着实现一下就好了，就可以获得flag 的后半段。具体算法实现看 exp 吧。
+
+exp: https://github.com/Konano/CTF-challenges/blob/master/Cat%26Soup/soup_exp.py
+
+不过这题不需要知道 EZStego 也可以解，就留给各位思考了！
